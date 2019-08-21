@@ -5,13 +5,13 @@ Container configuration allows you to run Chrome Driver in the background and au
 
 # Example usage
 ## Usage in Dockerfile
-`
-FROM thexela/ubuntu-python-selenium
 
-# run tests
-COPY . $APP_HOME/
-RUN pytest --path=$APP_HOME/tests
-`
+    FROM thexela/ubuntu-python-selenium
+
+    # run tests
+    COPY . $APP_HOME/
+    RUN pytest --path=$APP_HOME/tests
+
 
 ## Python tests configuraion
     class TestExample(object):
