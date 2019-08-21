@@ -3,8 +3,8 @@
 This container is a configuration of all the necessary packages and modules for running Selenium tests inside the docker.
 Container configuration allows you to run Chrome Driver in the background and automatically run user interface tests in Python.
 
-# Example usage
-## Usage in Dockerfile
+## Example usage
+### Usage in Dockerfile
 
     FROM thexela/ubuntu-python-selenium
 
@@ -13,7 +13,7 @@ Container configuration allows you to run Chrome Driver in the background and au
     RUN pytest --path=$APP_HOME/tests
 
 
-## Python tests configuraion
+### Python tests configuraion
     class TestExample(object):
         def setup_method(self, method):
             chrome_options = webdriver.ChromeOptions()
