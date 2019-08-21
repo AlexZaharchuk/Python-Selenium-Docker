@@ -14,7 +14,7 @@ RUN pytest --path=$APP_HOME/tests
 `
 
 ## Python tests configuraion
-`class TestExample(object):
+``class TestExample(object):
     def setup_method(self, method):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('user-agent={0}'.format(MY_USER_AGENT))
@@ -25,7 +25,7 @@ RUN pytest --path=$APP_HOME/tests
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         
-        // create virtual display
+        # create virtual display
         self.display = Display(visible=0, size=(1920, 1080))
         self.display.start()
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
@@ -44,4 +44,4 @@ RUN pytest --path=$APP_HOME/tests
         self.driver.find_element(By.ID, "password").click()
         self.driver.find_element(By.ID, "password").send_keys("1111")
         self.driver.find_element(By.ID, "password").send_keys(Keys.ENTER)
-`
+``
