@@ -35,11 +35,3 @@ RUN chmod +x /usr/bin/chromedriver
 
 # set display port to avoid crash
 ENV DISPLAY=:1
-
-# copy tests sources
-ENV APP_HOME /usr/src/app
-WORKDIR /$APP_HOME
-
-# run tests
-COPY . $APP_HOME/
-RUN pytest $APP_HOME/tests/run.py
