@@ -1,37 +1,36 @@
-FROM ubuntu:18.04
+FROM python:2.7-stretch
 
-# update dependencies
-RUN apt-get update -y
+RUN apt-get update && apt-get install -yq \
+    firefox-esr=52.6.0esr-1~deb9u1 \
+    chromium=62.0.3202.89-1~deb9u1 \
+    git-core=1:2.11.0-3+deb9u2 \
+    xvfb=2:1.19.2-1+deb9u2 \
+    xsel=1.2.0-2+b1 \
+    unzip=6.0-21 \
+    python-pytest=3.0.6-1 \
+    libgconf2-4=3.2.6-4+b1 \
+    libncurses5=6.0+20161126-1+deb9u2 \
+    libxml2-dev=2.9.4+dfsg1-2.2+deb9u2 \
+    libxslt-dev \
+    libz-dev \
+    xclip=0.12+svn84-4+b1
 
-# install python and all packages for starting chrome
-RUN apt-get install -y python3
-RUN apt-get install -y python3-pip
-RUN pip3 install --upgrade pip
+# GeckoDriver v0.19.1
+RUN wget -q "https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz" -O /tmp/geckodriver.tgz \
+    && tar zxf /tmp/geckodriver.tgz -C /usr/bin/ \
+    && rm /tmp/geckodriver.tgz
 
-RUN apt-get install -y curl libgl1-mesa-glx libnss3 libxcursor-dev libxtst6 libxrandr2 libasound2 xvfb ghostscript \
-                            libxi6 libgconf-2-4 unzip
+# chromeDriver v2.35
+RUN wget -q "https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip" -O /tmp/chromedriver.zip \
+    && unzip /tmp/chromedriver.zip -d /usr/bin/ \
+    && rm /tmp/chromedriver.zip
 
-WORKDIR /home
+# xvfb - X server display
+ADD xvfb-chromium /usr/bin/xvfb-chromium
+RUN ln -s /usr/bin/xvfb-chromium /usr/bin/google-chrome \
+    && chmod 777 /usr/bin/xvfb-chromium
 
-# install python libraries
-RUN pip3 install selenium
-RUN pip3 install pyvirtualdisplay
-RUN pip3 install xvfbwrapper
-RUN pip3 install pytest
-RUN apt-get install wget
-
-# download and install google chrome
-RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
-RUN echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
-RUN apt-get -y update
-RUN apt-get -y install google-chrome-stable
-
-# download chromedriver
-RUN wget https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-RUN mv chromedriver /usr/bin/chromedriver
-RUN chown root:root /usr/bin/chromedriver
-RUN chmod +x /usr/bin/chromedriver
-
-# set display port to avoid crash
-ENV DISPLAY=:1
+# create symlinks to chromedriver and geckodriver (to the PATH)
+RUN ln -s /usr/bin/geckodriver /usr/bin/chromium-browser \
+    && chmod 777 /usr/bin/geckodriver \
+    && chmod 777 /usr/bin/chromium-browser
